@@ -1,0 +1,39 @@
+.navbar {
+  height: auto;
+  width: 100vw;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  background-color: #202122;
+  justify-content: flex-start;
+  align-items: center;
+
+  &:hover {
+    color: #202122;
+  }
+
+  .icon {
+    flex: 1 0 auto;
+  }
+
+  .all-links {
+    flex: 1 0 auto;
+  }
+
+  .link {
+    color: #c95000;
+    font-size: 20px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease-out;
+    background-color: transparent;
+  }
+
+  .active-link {
+    @extend .link;
+    font-size: 20px;
+    color: #ddd;
+    background-color: #c95000;
+  }
+}
