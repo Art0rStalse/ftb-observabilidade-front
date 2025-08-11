@@ -17,10 +17,16 @@ function Navbar() {
             </div>
             <div className="all-links">
                 <Link
-                    href="/about"
-                    className={`link ${pathname === '/about' ? 'active-link' : ''}`}
+                    href="/schema"
+                    className={`link ${pathname === '/schema' ? 'active-link' : ''}`}
                 >
-                    About
+                    Schema Changes
+                </Link>
+                <Link
+                    href="/synchronizations"
+                    className={`link ${pathname === '/synchronizations' ? 'active-link' : ''}`}
+                >
+                    Synchronizations
                 </Link>
                 <Link
                     href="/home"

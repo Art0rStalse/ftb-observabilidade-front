@@ -1,7 +1,10 @@
+"use client";
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "./globals.scss";
 import Navbar from "@/components/navbar";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,16 +16,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Airbyte Observabilidade",
-  description: "Airbyte Observabilidade - Fretebras",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+    const queryClient = new QueryClient();
+
   return (
     <html lang="pt-br">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
@@ -30,7 +30,9 @@ export default function RootLayout({
             <Navbar />
         </header>
         <main>
-          {children}
+            <QueryClientProvider client={queryClient}>
+                {children}
+            </QueryClientProvider>
         </main>
         <footer></footer>
       </body>
