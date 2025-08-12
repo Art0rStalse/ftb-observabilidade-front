@@ -11,7 +11,7 @@ function Navbar() {
     return (
         <nav className="navbar">
             <div className="icon">
-                <Link href="/home">
+                <Link href="/">
                     <Image src='/logo-horizontal.png' alt="Stalse" height={70} width={200} style={{ objectFit: 'cover' }} />
                 </Link>
             </div>
@@ -19,20 +19,15 @@ function Navbar() {
                 <Link
                     href="/schema"
                     className={`link ${pathname === '/schema' ? 'active-link' : ''}`}
+
                 >
-                    Schema Changes
+                    Mudanças no Schema
                 </Link>
                 <Link
                     href="/synchronizations"
                     className={`link ${pathname === '/synchronizations' ? 'active-link' : ''}`}
                 >
-                    Synchronizations
-                </Link>
-                <Link
-                    href="/home"
-                    className={`link ${pathname === '/home' ? 'active-link' : ''}`}
-                >
-                    Home
+                    Sincronizações
                 </Link>
             </div>
         </nav>

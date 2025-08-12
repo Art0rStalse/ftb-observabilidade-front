@@ -1,60 +1,21 @@
-"use client";
-
-import {usePathname, useSearchParams} from "next/navigation";
-import {listAllSynchronization} from "@/actions/synchronization";
+import TablePage from "@/components/TablePage/TablePage";
 import {ISynchronization} from "@/entities/synchronization";
-import {useQuery} from "@tanstack/react-query";
-import "./style.scss";
-import SynchronizationModal from "@/app/synchronizations/components/SynchronizationModal";
-import Link from "next/link";
+import SynchronizationTbody from "@/components/TablePage/components/SynchronizationTbody";
+import {Suspense} from "react";
+import Loading from "@/components/Loading/loading";
 
-
-function SynchronizationsPage() {
-    const searchParams = useSearchParams();
-    const pathname = usePathname();
-
-    const { data: synchronizations, isLoading } = useQuery({
-        queryKey: ["synchronizations", searchParams.toString()],
-        queryFn: () => listAllSynchronization({
-            offset: searchParams.get('offset'),
-            limit: searchParams.get('limit'),
-            order_by: searchParams.get('order_by'),
-            direction: searchParams.get('direction'),
-        }),
-    });
-
-    if (isLoading) return <p>Loading</p>;
-
+function Synchronization() {
     return (
-        <section className="section">
-            <h1>Sincronizações Finalizadas <Link href={`?show=true`}>KxAJS</Link> </h1>
-            {searchParams.get('show') === 'true' ? <SynchronizationModal /> : <div></div>}
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>Fonte</th>
-                        <th>Destino</th>
-                        <th>Conector</th>
-                        <th>Sucesso</th>
-                        <th>Começou Em</th>
-                        <th>Terminou Em</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {synchronizations?.map((synchronization: ISynchronization) => (
-                        <tr key={synchronization.id}>
-                            <td>{synchronization.source}</td>
-                            <td>{synchronization.destination}</td>
-                            <td>{synchronization.connection}</td>
-                            <td>{synchronization.success ? 'Sim' : 'Não'}</td>
-                            <td>{synchronization.startedAt}</td>
-                            <td>{synchronization.finishedAt}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </section>
-    )
+        <Suspense fallback={<Loading />}>
+            <TablePage<ISynchronization>
+                endpoint="synchronization"
+                columns={['Fonte', 'Destino', 'Conector', 'Sucesso', 'Começou Em', 'Terminou Em']}
+                Row={SynchronizationTbody}
+                title="Sincronizações"
+            />
+        </Suspense>
+    );
 }
 
-export default SynchronizationsPage;
+
+export default Synchronization;
