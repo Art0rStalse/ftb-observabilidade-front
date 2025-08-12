@@ -6,7 +6,7 @@ import {useQuery} from "@tanstack/react-query";
 import "./style.scss";
 import Loading from "@/components/Loading/loading";
 import { JSX } from "react";
-import FilterAndNavigation from "@/components/TablePage/components/FilterAndNavigation";
+import FilterAndNavigation from "@/components/TablePage/components/FilterAndNavigation/FilterAndNavigation";
 
 interface TablePageProps<T> {
     endpoint: string;
