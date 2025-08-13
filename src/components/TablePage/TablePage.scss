@@ -39,19 +39,19 @@ h1 {
   tbody tr {
     height:48px;
     border-bottom: 1px solid black;
+    padding: 0;
+    margin: 0 auto;
 
     &:last-child {
       border:0;
     }
 
     &:hover {
-      background: #ffc096;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 
-      .loading {
-        padding: 0;
-        background: #ddd;
-        margin: 0 auto;
+      // when loading hover must not be applied
+      &:not(.loading) {
+        background: #ffc096;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       }
     }
   }

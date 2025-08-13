@@ -1,8 +1,7 @@
-.navigation {
+.filter-button {
   padding: 8px 16px;
   border-radius: 4px;
   background-color: #c95000;
-  margin: 0 20px;
 
   &:hover {
     background-color: #ff8330;
@@ -15,9 +14,18 @@
   }
 }
 
+.navigation {
+  @extend .filter-button;
+  margin: 0 10px;
+}
+
 
 .dropdown-button {
+  @extend .filter-button;
+}
 
+.reset-filter-button {
+  @extend .filter-button;
 }
 
 .dropdown {
@@ -45,14 +53,19 @@
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    width: 10vw;
-    min-width: 5vw;
-    max-width: 10vw;
+    width: 12vw;
+    min-width: 6vw;
+    max-width: 13vw;
     border: 0.5px solid black;
 
     &:hover {
       background-color: #c95000;
       cursor: pointer
+    }
+
+    &.selected {
+      background-color: #c95000;
+      cursor: not-allowed;
     }
   }
 }
@@ -62,11 +75,12 @@
   flex-direction: row;
   align-items: center;
   gap: 16px;
+  margin: 0 10px;
 }
 
 .filter-and-navigation {
   display: flex;
-  flex-direction: row;
+  flex-direction: column-reverse;
   align-items: center;
   justify-content: space-between;
 }

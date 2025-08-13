@@ -12,6 +12,7 @@ function Schema() {
               columns={['Descrição', 'Conector', 'Modificado em']}
               Row={SchemaTbody}
               title="Mudanças nos Schemas"
+              filters={{}}
           />
       </Suspense>
     );

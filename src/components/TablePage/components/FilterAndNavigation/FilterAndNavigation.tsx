@@ -1,7 +1,7 @@
 import { ReadonlyURLSearchParams } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import "./style.scss";
-import {MouseEvent} from "react";
+import "./FilterAndNavigation.scss";
+import {MouseEvent, useEffect, useState} from "react";
 
 interface FilterAndNavigationProps {
     searchParams:  ReadonlyURLSearchParams;
@@ -9,10 +9,19 @@ interface FilterAndNavigationProps {
     pathname: string;
     totalPages: number;
     page: number;
+    filters: Record<string, string>;
 }
 
-function FilterAndNavigation({router, searchParams, pathname, page, totalPages}: FilterAndNavigationProps) {
+function FilterAndNavigation({router, searchParams, pathname, page, totalPages, filters}: FilterAndNavigationProps) {
+    const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
+    useEffect(() => {
+        const params = new URLSearchParams(searchParams.toString());
+        const filterBy= params.get('filter_by');
+
+        if (filterBy && Object.keys(filters).includes(filterBy)) setSelectedFilter(filterBy);
+
+    }, [filters, searchParams]);
 
     const handlePageChange = (newPage: number) => {
         const params = new URLSearchParams(searchParams.toString());
@@ -23,10 +32,19 @@ function FilterAndNavigation({router, searchParams, pathname, page, totalPages}:
     const handleFilterBy = (e: MouseEvent<HTMLDivElement>) => {
         const content = (e.target as HTMLDivElement).getAttribute('data-value');
         const params = new URLSearchParams(searchParams.toString());
+
         if (content) {
             params.set('filter_by', content.toString());
             router.push(`${pathname}?${params.toString()}`);
         }
+    }
+
+    const handleResetFilter = (): void => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete('filter_by');
+        setSelectedFilter(null);
+
+        router.push(`${pathname}?${params.toString()}`);
     }
 
     return (
@@ -50,20 +68,27 @@ function FilterAndNavigation({router, searchParams, pathname, page, totalPages}:
                     Próxima
                 </button>
             </div>
-            <div className="filter-by">
-                <h4>Filtrar Por</h4>
-                <div className="dropdown">
-                    <button className="dropdown-button">Filtro</button>
-                    <div className="dropdown-content">
-                        <div onClick={handleFilterBy} data-value='success-true'>Com Sucesso</div>
-                        <div onClick={handleFilterBy} data-value='success-false'>Sem Sucesso</div>
-                        <div onClick={handleFilterBy} data-value='started-at-hl'>Criado Em (Maior &gt; Menor)</div>
-                        <div onClick={handleFilterBy} data-value='started-at-lh'>Criado Em (Menor &gt; Maior)</div>
-                        <div onClick={handleFilterBy} data-value='finished-at-hl'>Finalizado Em (Maior &gt; Menor)</div>
-                        <div onClick={handleFilterBy} data-value='finished-at-lh'>Finalizado Em (Menor &gt; Maior)</div>
+            {Object.keys(filters).length > 0 ?
+                <div className="filter-by">
+                    <h4>Filtrar Por</h4>
+                    <div className="dropdown">
+                        <button className="dropdown-button">{selectedFilter ? filters[selectedFilter] : 'Nenhum'}</button>
+                        <div className="dropdown-content">
+                            {Object.keys(filters).map(key => (
+                                <div
+                                    key={key}
+                                    className={`${selectedFilter == key ? 'selected' : ''}`}
+                                    onClick={selectedFilter == key ? undefined : handleFilterBy}
+                                    data-value={key}
+                                    aria-disabled={selectedFilter == key}
+                                >{filters[key]}</div>
+                            ))}
+                        </div>
                     </div>
+                    {selectedFilter ?
+                        <button className="reset-filter-button" onClick={handleResetFilter}>Resetar Filtro</button> : null}
                 </div>
-            </div>
+                : null}
         </div>
     )
 }

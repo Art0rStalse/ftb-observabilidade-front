@@ -3,7 +3,7 @@
 import {usePathname, useSearchParams, useRouter} from "next/navigation";
 import {listAll} from "@/actions/generics";
 import {useQuery} from "@tanstack/react-query";
-import "./style.scss";
+import "./TablePage.scss";
 import Loading from "@/components/Loading/loading";
 import { JSX } from "react";
 import FilterAndNavigation from "@/components/TablePage/components/FilterAndNavigation/FilterAndNavigation";
@@ -13,9 +13,10 @@ interface TablePageProps<T> {
     columns: string[];
     title: string;
     Row: ({data}: { data: T }) => JSX.Element;
+    filters: Record<string, string>;
 }
 
-function TablePage<T extends { id: string }>({endpoint, columns, Row, title}: TablePageProps<T>) {
+function TablePage<T extends { id: string }>({endpoint, columns, Row, title, filters}: TablePageProps<T>) {
     const searchParams = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
@@ -30,6 +31,7 @@ function TablePage<T extends { id: string }>({endpoint, columns, Row, title}: Ta
             offset: offset,
             limit: pageSize,
             order_by: searchParams.get('order_by'),
+            filter_by: searchParams.get('filter_by'),
             direction: searchParams.get('direction'),
             endpoint: `${endpoint}`,
         }),
@@ -40,13 +42,14 @@ function TablePage<T extends { id: string }>({endpoint, columns, Row, title}: Ta
     return (
         <section className="section">
             <h1>{title}</h1>
-            {isLoading ? <small></small> :
+            {isLoading ? null :
                 <FilterAndNavigation
                     router={router}
                     searchParams={searchParams}
                     page={page}
                     totalPages={totalPages}
                     pathname={pathname}
+                    filters={filters}
                 />}
             <table className="table">
                 <thead>
@@ -58,9 +61,14 @@ function TablePage<T extends { id: string }>({endpoint, columns, Row, title}: Ta
                 </thead>
                 <tbody>
                 {isLoading ?
-                    <tr>
-                        <td className="loading" colSpan={6}><Loading /></td>
-                    </tr> : data?.results.map((d: T) => <Row key={d.id} data={d}/>
+                    <tr className="loading">
+                        <td colSpan={columns.length}><Loading /></td>
+                    </tr>
+                    : totalPages <= 0 ?
+                        <tr className="loading">
+                            <td colSpan={columns.length}>Nenhum registro encontrado</td>
+                        </tr>
+                        : data?.results.map((d: T) => <Row key={d.id} data={d} />
                     )}
                 </tbody>
             </table>

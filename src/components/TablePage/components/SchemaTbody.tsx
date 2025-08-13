@@ -7,7 +7,7 @@ function SchemaTbody({ data }: { data: ISchema }) {
         <tr>
             <td>{data.description}</td>
             <td>{data.connection}</td>
-            <td>{data.changedAt}</td>
+            <td>{new Date(data.changedAt).toLocaleString()}</td>
         </tr>
     )
 }
