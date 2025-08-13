@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.scss";
 import Navbar from "@/components/Navbar/navbar";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {SessionProvider} from "next-auth/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,7 +27,9 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <header>
-            <Navbar />
+            <SessionProvider>
+                <Navbar />
+            </SessionProvider>
         </header>
         <main>
             <QueryClientProvider client={queryClient}>

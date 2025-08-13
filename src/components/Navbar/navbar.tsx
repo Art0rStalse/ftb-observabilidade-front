@@ -4,9 +4,12 @@ import Link from "next/link";
 import {usePathname} from "next/navigation";
 import "./navbar.scss";
 import Image from "next/image";
+import {useSession} from "next-auth/react";
+import {handleSignOut} from "@/actions/auth";
 
 function Navbar() {
     const pathname = usePathname();
+    const { data: session } = useSession();
 
     return (
         <nav className="navbar">
@@ -29,6 +32,12 @@ function Navbar() {
                 >
                     Sincronizações
                 </Link>
+            </div>
+            <div>
+                <span className="logged-session-text">Ola, {session?.user?.name}</span>
+                <button
+                    className="logout-button"
+                    onClick={handleSignOut}>Sair</button>
             </div>
         </nav>
     );
